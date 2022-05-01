@@ -60,7 +60,9 @@ export default async (req: CustomRequest<ISignup>, res: Response) => {
 						customer: NEW_USER.stripeId,
 						type: 'card',
 					})
-					const subscriptions = await Stripe.subscriptions?.list({customer: NEW_USER.stripeId})
+					const subscriptions = await Stripe.subscriptions?.list({
+						customer: NEW_USER.stripeId,
+					})
 					return res.status(200).json({
 						status: 'success',
 						message: 'User account was created successfully.',
@@ -77,7 +79,7 @@ export default async (req: CustomRequest<ISignup>, res: Response) => {
 						activeSubscription: NEW_USER.activeSubscription,
 						requestTime: new Date().toISOString(),
 					})
-				},
+				}
 			)
 		}
 	} catch (err) {
@@ -90,4 +92,4 @@ export default async (req: CustomRequest<ISignup>, res: Response) => {
 			})
 		}
 	}
-};
+}

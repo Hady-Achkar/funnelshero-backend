@@ -57,7 +57,7 @@ const UserSchema = new Schema<IUser>(
 		timestamps: true,
 		minimize: false,
 		versionKey: false,
-	},
+	}
 )
 
 UserSchema.index({
@@ -66,7 +66,7 @@ UserSchema.index({
 	type: 'text',
 	stripeId: 'text',
 })
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
 	const fname = this.fname
 		.split(' ')
 		.map((val: string) => val.charAt(0).toUpperCase() + val.slice(1))
@@ -84,15 +84,10 @@ UserSchema.pre('save', async function(next) {
 		email: this.email,
 		name: `${fname} ${lname}`,
 	})
-	const subscription = await Stripe.subscriptions?.create({
-		customer: stripeCustomer.id,
-		items: [{price: this.activePrice}],
-		trial_period_days: 14,
-	})
 	this.inTrial = true
 	this.isTrialLegit = false
 	this.stripeId = stripeCustomer.id
-	this.activeSubscription = subscription.id
+	this.activeSubscription = ''
 	next()
 })
 export default model<IUser>('User', UserSchema)
